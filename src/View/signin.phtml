@@ -1,0 +1,32 @@
+<?php include_once PAGE_HEADER; ?>
+<div class="container-xl">
+    <main class="my-5 d-flex justify-content-center">
+        <div class="card form-card bg-body-tertiary">
+            <div class="card-body pt-0">
+                <div class="d-flex justify-content-center align-items-center my-5">
+                    <a href="/">
+                        <img class="mw-100" src="/images/logo.svg">
+                    </a>
+                </div>
+                <form method="POST" action="/signin">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="login" name="login" placeholder="Email address or username" required>
+                        <label for="login">Email address or username:</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="password" class="form-control" id="pswd" name="pswd" minlength="4" placeholder="Password" required>
+                        <label for="pswd">Password:</label>
+                    </div>
+                    <div class="mb-3">
+                        <button class="btn btn-primary w-100" name="submit">Sign In</button>
+                    </div>
+                </form>
+                <span class="d-flex flex-column align-items-center">
+                    <text>Don't have an account?</text>
+                    <a href="/signup">SIGN UP</a>
+                </span>
+            </div>
+        </div>
+    </main>
+</div>
+<?php include_once PAGE_FOOTER; ?>

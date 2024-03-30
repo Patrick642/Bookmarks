@@ -1,0 +1,26 @@
+{
+    "name": "patrick642/bookmarks",
+    "description": "Application for storing and sharing bookmarks.",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "src\\": "src/",
+            "core\\": "core/"
+        },
+        "files": [
+            "config/config.php",
+            "config/db.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "Patrick642",
+            "homepage": "https://github.com/Patrick642"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^8.2"
+    }
+}
