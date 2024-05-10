@@ -30,7 +30,7 @@ cd Bookmarks
 composer dump-autoload
 ```
 
-**4.** Create a new database
+**4.** Create a new database.
 
 **5.** Import `data/bookmarks.sql` file to create a schema for the newly created database.
 
