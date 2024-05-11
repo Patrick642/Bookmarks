@@ -1,5 +1,5 @@
 # Bookmarks
-An application for storing and sharing bookmarks. 
+An application for storing and sharing bookmarks written in pure PHP. 
 
 ## Requirements
   * PHP 8.2.0 or higher
