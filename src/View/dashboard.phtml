@@ -35,7 +35,7 @@
         <?php foreach ($data as $r): ?>
             <div class="bookmark-card mx-auto my-4 bg-primary bg-gradient text-white">
                 <div class="bookmark-card-body d-flex flex-row">
-                    <a target="_blank" class="bookmark-link w-100" title="<?= $r['url'] ?>" href="<?= (parse_url($r['url'], PHP_URL_SCHEME) === NULL) ? '//' . $r['url'] : $r['url'] ?>">
+                    <a target="_blank" class="bookmark-link w-100" title="<?= $r['url'] ?>" href="<?= (parse_url($r['url'], PHP_URL_SCHEME) === null) ? '//' . $r['url'] : $r['url'] ?>">
                         <?= $r['title'] ?>
                     </a>
                     <div class="dropdown">
@@ -89,8 +89,8 @@
 </div>
 
 <!-- Add modal -->
-<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header border-0">
                 <h1 class="modal-title fs-5" id="addBookmarkModalLabel">Add a new bookmark</h1>
@@ -106,6 +106,7 @@
                         <label for="bookmark_url" class="form-label">Url:</label>
                         <input type="text" class="form-control" id="bookmark_url" name="url" required>
                     </div>
+                    <div class="alert-container"></div>
                 </form>
             </div>
             <div class="modal-footer border-0">
@@ -117,24 +118,25 @@
 </div>
 
 <!-- Edit modal -->
-<div class="modal fade" id="editBookmarkModal" tabindex="-1" aria-labelledby="editBookmarkModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal" id="editBookmarkModal" tabindex="-1" aria-labelledby="editBookmarkModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header border-0">
                 <h1 class="modal-title fs-5" id="editBookmarkModalLabel">Edit bookmark</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="/dashboard/edit" id="editBookmarkForm" class="d-flex flex-column gap-3 form-modal">
-                    <div class="form-group">
+                <form method="POST" action="/dashboard/edit" id="editBookmarkForm" class="d-flex flex-column form-modal">
+                    <div class="form-group mb-3">
                         <label for="bookmark_edit_title" class="form-label">Title:</label>
                         <input type="text" class="form-control" id="bookmark_edit_title" name="title" required>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group mb-3">
                         <label for="bookmark_edit_url" class="form-label">Url:</label>
                         <input type="text" class="form-control" id="bookmark_edit_url" name="url" required>
                     </div>
                     <input type="hidden" name="bookmark_id" value="">
+                    <div class="alert-container"></div>
                 </form>
             </div>
             <div class="modal-footer border-0">
@@ -146,8 +148,8 @@
 </div>
 
 <!-- Delete modal -->
-<div class="modal fade" id="deleteBookmarkModal" tabindex="-1" aria-labelledby="deleteBookmarkModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal" id="deleteBookmarkModal" tabindex="-1" aria-labelledby="deleteBookmarkModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header border-0">
                 <h1 class="modal-title fs-5" id="deleteBookmarkModalLabel">Delete bookmark</h1>
@@ -157,9 +159,9 @@
                 Do you really want delete this bookmark?
                 <form method="POST" action="/dashboard/delete" id="deleteBookmarkForm" class="d-flex flex-column gap-3 form-modal">
                     <input type="hidden" name="bookmark_id" value="">
+                    <div class="alert-container"></div>
                 </form>
             </div>
-
             <div class="modal-footer border-0">
                 <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
                 <button type="submit" form="deleteBookmarkForm" class="btn btn-danger">Delete</button>
@@ -169,8 +171,8 @@
 </div>
 
 <!-- Share modal -->
-<div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header border-0">
                 <h1 class="modal-title fs-5" id="shareModalLabel">Share</h1>
@@ -186,7 +188,7 @@
                         </svg>
                     </button>
                 </div>
-
+                <div class="alert-container mt-3"></div>
             </div>
         </div>
     </div>

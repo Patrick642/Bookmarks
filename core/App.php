@@ -9,9 +9,15 @@ class App
     protected Request $request;
     protected Error $error;
 
+    public function __construct()
+    {
+        $this->router = new Router();
+        $this->request = new Request();
+        $this->error = new Error();
+    }
+
     public function run()
     {
-        $this->error = new Error();
         set_error_handler([$this->error, 'errorHandler']);
         set_exception_handler([$this->error, 'exceptionHandler']);
 

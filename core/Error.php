@@ -47,10 +47,9 @@ class Error
      * @param  mixed $message
      * @return void
      */
-    private function logError(string $message): void
+    public function logError(string $message): void
     {
         $log = '[' . date('Y-m-d, H:i:s') . '] ' . $message . PHP_EOL;
-        $dir = ROOT_DIR . '/log/errors.log';
-        error_log($log, 3, $dir);
+        error_log($log, 3, LOG_ERRORS);
     }
 }

@@ -1,5 +1,4 @@
-$(document).ready(function () {
-
+$(function () {
     /* Execute function to copy URL of the bookmark to the user's clipboard when the button is clicked. */
     $('[bookmark-copyurl]').click(function () {
         copyLink($(this).attr('bookmark-copyurl'));
@@ -7,7 +6,14 @@ $(document).ready(function () {
 
     /* Copy share link. */
     $('#copyBookmarksShareLink').click(function () {
-        copyLink($('#bookmarksShareLink').val());
+        if (copyLink($('#bookmarksShareLink').val())) {
+            $(this).closest('.modal-body').find('.alert-container').append(formAlert('success', 'Link copied to your clipboard!'));
+        } else {
+            $(this).closest('.modal-body').find('.alert-container').append(formAlert('error', 'Unable to copy link to clipboard. Do it manually.'));
+        }
+        setTimeout(() => {
+            $(this).closest('.modal-body').find('.alert-container').empty();
+        }, 1000);
     });
 
     /* Copies the bookmark ID to a hidden input in the form. */
@@ -75,7 +81,7 @@ $(document).ready(function () {
                     case 'success':
                         $('button').prop('disabled', true);
                         if (form.hasClass('form-modal')) {
-                            form.append(formAlert('success', 'Success!'));
+                            form.find('.alert-container').append(formAlert('success', 'Success!'));
                             setTimeout(() => {
                                 window.location.reload();
                             }, 1000);
@@ -83,14 +89,13 @@ $(document).ready(function () {
                             window.location = '/dashboard';
                         }
                         break;
-                    case 'error':
-                        if (form.hasClass('form-modal')) {
-                            form.append(formAlert('danger', res.message));
-                        } else {
-                            form.find('button').before(formAlert('danger', res.message));
-                        }
+                    default:
+                        form.find('.alert-container').append(formAlert('danger', res.message));
                         break;
                 }
+            },
+            error: function () {
+                form.find('.alert-container').append(formAlert('danger', 'An error occured.'));
             }
         });
     });
@@ -110,5 +115,9 @@ function formAlert(type, message) {
 
 /* Function that copies link to user's clipboard */
 function copyLink(url) {
-    navigator.clipboard.writeText(url);
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(url);
+        return true;
+    }
+    return false;
 }

@@ -2,25 +2,29 @@
 <?php include_once PAGE_NAVBAR; ?>
 <div class="container-xl">
     <main class="my-5">
+        <div class="d-flex flex-row justify-content-center align-items-center">
+            <h3 class="m-0"><?= $username ?></h3>
+            <button class="btn border-0" title="Share" data-bs-toggle="modal" data-bs-target="#shareModal">
+                <svg class="icon icon-tabler" width="24" height="24" viewBox="0 0 24 24">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M6 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path>
+                    <path d="M18 6m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path>
+                    <path d="M18 18m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path>
+                    <path d="M8.7 10.7l6.6 -3.4"></path>
+                    <path d="M8.7 13.3l6.6 3.4"></path>
+                </svg>
+            </button>
+        </div>
         <?php if ($is_public === false): ?>
-            <div class="text-center">
-                <h2 class="text-center">
-                    <?= $username ?>
-                </h2>
-                <p class="text-secondary text-center">Bookmarks of this user are private</p>
-                <a href="/">Go to home page</a>
-            </div>
+            <p class="text-secondary text-center">Bookmarks of this user are private</p>
         <?php else: ?>
-            <h2 class="text-center">
-                <?= $username ?>
-            </h2>
             <?php if (count($data) === 0): ?>
                 <p class="text-secondary text-center">Currently this user has no bookmarks</p>
             <?php endif; ?>
             <?php foreach ($data as $r): ?>
                 <div class="bookmark-card mx-auto my-4 bg-primary bg-gradient text-white">
                     <div class="bookmark-card-body d-flex flex-row">
-                        <a target="_blank" class="bookmark-link w-100" title="<?= $r['url'] ?>" href="<?= (parse_url($r['url'], PHP_URL_SCHEME) === NULL) ? '//' . $r['url'] : $r['url'] ?>">
+                        <a target="_blank" class="bookmark-link w-100" title="<?= $r['url'] ?>" href="<?= (parse_url($r['url'], PHP_URL_SCHEME) === null) ? '//' . $r['url'] : $r['url'] ?>">
                             <?= $r['title'] ?>
                         </a>
                         <div class="dropdown">
@@ -49,5 +53,29 @@
             <?php endforeach; ?>
         <?php endif; ?>
     </main>
+</div>
+
+<!-- Share modal -->
+<div class="modal" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h1 class="modal-title fs-5" id="shareModalLabel">Share</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="bookmarksShareLink" value="<?= BASE_URL . '/b?u=' . $username ?>" disabled readonly>
+                    <button class="input-group-text" id="copyBookmarksShareLink">
+                        <svg class="icon icon-tabler" width="24" height="24" viewBox="0 0 24 24">
+                            <path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" />
+                            <path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="alert-container mt-3"></div>
+            </div>
+        </div>
+    </div>
 </div>
 <?php include_once PAGE_FOOTER; ?>

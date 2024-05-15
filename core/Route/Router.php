@@ -17,7 +17,7 @@ class Router
                 'path' => strtolower(rtrim($r[1], '/')),
                 'controller' => $r[2],
                 'action' => str_replace('()', '', $r[3]),
-                'middleware' => $r[4] ?? NULL
+                'middleware' => $r[4] ?? null
             ]);
         }
     }
@@ -28,9 +28,9 @@ class Router
 
         foreach ($this->routes as $route) {
             if ($route['path'] === $path && $route['method'] === $method) {
-                $middleware = Middleware::MAP[$route['middleware']] ?? NULL;
+                $middleware = Middleware::MAP[$route['middleware']] ?? null;
 
-                if ($middleware !== NULL)
+                if ($middleware !== null)
                     (new $middleware)->handle();
 
                 $class_name = '\src\Controller\\' . $route['controller'];

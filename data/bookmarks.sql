@@ -43,7 +43,7 @@ CREATE TABLE `bookmark` (
 CREATE TABLE `user` (
   `id` int(11) NOT NULL,
   `username` varchar(32) NOT NULL,
-  `email` varchar(254) NOT NULL,
+  `email` varchar(255) NOT NULL,
   `password_hash` varchar(60) NOT NULL,
   `is_public` tinyint(1) NOT NULL,
   `date_joined` datetime NOT NULL DEFAULT current_timestamp()
@@ -65,7 +65,8 @@ ALTER TABLE `bookmark`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `username` (`username`);
+  ADD UNIQUE KEY `username` (`username`),
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- AUTO_INCREMENT for dumped tables

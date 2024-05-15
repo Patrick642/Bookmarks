@@ -14,7 +14,7 @@ class Board extends Controller
 
         $user_id = (new User)->getIdByUsername($username);
 
-        if ($user_id === NULL)
+        if ($user_id === null)
             throw new \ErrorException('Not found', 404);
 
         $username = (new User)->getUsernameById($user_id);

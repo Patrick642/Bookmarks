@@ -100,6 +100,12 @@ class User extends Model
         if (!filter_var($email, FILTER_VALIDATE_EMAIL))
             throw new Exception('Email is incorrect.');
 
+        if ($this->getEmail($user_id) === $email)
+            throw new Exception('This email address is already assigned to your account.');
+
+        if ($this->isEmailTaken($email) === true)
+            throw new Exception('This email address is already taken by another user, please try another one.');
+
         $query = $this->db()->prepare('UPDATE user SET user.email = :email WHERE user.id = :user_id');
 
         return $query->execute([
@@ -270,7 +276,7 @@ class User extends Model
 
         $data_fetch = $query->fetch(PDO::FETCH_ASSOC);
 
-        return $data_fetch['id'] ?? NULL;
+        return $data_fetch['id'] ?? null;
     }
     /**
      * Get username with user ID
@@ -288,7 +294,7 @@ class User extends Model
 
         $data_fetch = $query->fetch(PDO::FETCH_ASSOC);
 
-        return $data_fetch['username'] ?? NULL;
+        return $data_fetch['username'] ?? null;
     }
 
     /**

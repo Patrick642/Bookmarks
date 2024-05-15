@@ -1,6 +1,6 @@
 {
     "name": "patrick642/bookmarks",
-    "description": "Application for storing and sharing bookmarks.",
+    "description": "An application for storing and sharing bookmarks.",
     "type": "project",
     "license": "MIT",
     "autoload": {
@@ -19,7 +19,7 @@
             "homepage": "https://github.com/Patrick642"
         }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "require": {
         "php": "^8.2"
     }

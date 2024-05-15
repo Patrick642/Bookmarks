@@ -18,7 +18,8 @@ abstract class Model
                 $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 $this->db = $dbh;
             } catch (PDOException $e) {
-                throw new \ErrorException($e->getMessage());
+                (new Error)->logError($e->getMessage());
+                throw new \Exception('The app is currently unavailable, please try again later.');
             }
         }
     }
