@@ -5,9 +5,17 @@ class View
 {
     const VIEW_DIR = ROOT_DIR . '/src/View/';
 
-    public function getView(string $view_name, array $variables = []): void
+    private SessionMessage $sessionMessage;
+
+    public function __construct()
     {
-        $file_path = self::VIEW_DIR . $view_name . '.phtml';
+        $this->sessionMessage = new SessionMessage();
+    }
+
+    public function get(string $view_name, array $variables = []): void
+    {
+        $variables['session_message'] = $this->sessionMessage->get();
+        $file_path = self::VIEW_DIR . $view_name;
 
         extract($variables);
 

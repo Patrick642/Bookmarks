@@ -1,31 +1,42 @@
 <?php
 namespace src\Controller;
 
-use core\Controller, core\View, src\Model\Bookmark, src\Model\User;
+use core\Controller, src\Model\BookmarkModel, src\Model\UserModel;
 
 class Dashboard extends Controller
 {
+    private BookmarkModel $bookmark_model;
+    private UserModel $user_model;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->bookmark_model = new BookmarkModel();
+        $this->user_model = new UserModel();
+    }
+
     public function index(): void
     {
-        (new View)->getView('dashboard', [
+        $this->view->get('dashboard/index.phtml', [
             'page_title' => 'Dashboard - Bookmarks',
-            'is_public' => (new User)->isPublic($_SESSION['user_id']),
-            'data' => (new Bookmark)->getAllByUserId($_SESSION['user_id'])
+            'is_public' => $this->user_model->isPublic($_SESSION['user_id']),
+            'data' => $this->bookmark_model->getAllByUserId($_SESSION['user_id'])
         ]);
     }
 
     public function addBookmark(): void
     {
         if (!$this->request->isXMLHttpRequest())
-            exit;
+            throw new \ErrorException('', 403);
+
         try {
-            if ($this->isEmpty($_POST['label']) || $this->isEmpty($_POST['url']))
+            if (!$this->formFields('POST', ['label', 'url']))
                 throw new \Exception('Not all required fields are filled.');
 
             $label = $this->sanitizeInput($_POST['label']);
             $url = $this->sanitizeInput($_POST['url']);
 
-            (new Bookmark)->add($_SESSION['user_id'], $label, $url);
+            $this->bookmark_model->add($_SESSION['user_id'], $label, $url);
 
             echo json_encode([
                 'status' => 'success'
@@ -36,23 +47,21 @@ class Dashboard extends Controller
                 'status' => 'error',
                 'message' => $e->getMessage()
             ]);
-
-            exit;
         }
     }
 
     public function deleteBookmark(): void
     {
         if (!$this->request->isXMLHttpRequest())
-            exit;
+            throw new \ErrorException('', 403);
 
         try {
-            if ($this->isEmpty($_POST['bookmark_id']))
+            if (!$this->formFields('POST', ['bookmark_id']))
                 throw new \Exception('Bookmark ID is not set.');
 
             $bookmark_id = filter_var($_POST['bookmark_id'], FILTER_SANITIZE_NUMBER_INT);
 
-            (new Bookmark)->delete($bookmark_id, $_SESSION['user_id']);
+            $this->bookmark_model->delete($bookmark_id, $_SESSION['user_id']);
 
             echo json_encode([
                 'status' => 'success'
@@ -63,25 +72,23 @@ class Dashboard extends Controller
                 'status' => 'error',
                 'message' => $e->getMessage()
             ]);
-
-            exit;
         }
     }
 
     public function editBookmark(): void
     {
         if (!$this->request->isXMLHttpRequest())
-            exit;
+            throw new \ErrorException('', 403);
 
         try {
-            if ($this->isEmpty($_POST['bookmark_id']) || $this->isEmpty($_POST['title']) || $this->isEmpty($_POST['url']))
+            if (!$this->formFields('POST', ['bookmark_id', 'title', 'url']))
                 throw new \Exception('Not all required data is set.');
 
             $bookmark_id = $this->sanitizeInput($_POST['bookmark_id']);
             $bookmark_title = $this->sanitizeInput($_POST['title']);
             $bookmark_url = $this->sanitizeInput($_POST['url']);
 
-            (new Bookmark)->edit($bookmark_id, $bookmark_title, $bookmark_url, $_SESSION['user_id']);
+            $this->bookmark_model->edit($bookmark_id, $bookmark_title, $bookmark_url, $_SESSION['user_id']);
 
             echo json_encode([
                 'status' => 'success'
@@ -92,23 +99,21 @@ class Dashboard extends Controller
                 'status' => 'error',
                 'message' => $e->getMessage()
             ]);
-
-            exit;
         }
     }
 
     public function getBookmark(): void
     {
         if (!$this->request->isXMLHttpRequest())
-            exit;
+            throw new \ErrorException('', 403);
 
         try {
-            if ($this->isEmpty($_GET['bookmark_id']))
+            if (!$this->formFields('GET', ['bookmark_id']))
                 throw new \Exception('Bookmark ID is not set.');
 
             $bookmark_id = filter_var($_GET['bookmark_id'], FILTER_SANITIZE_NUMBER_INT);
 
-            $bookmark = (new Bookmark)->get($bookmark_id, $_SESSION['user_id']);
+            $bookmark = $this->bookmark_model->get($bookmark_id, $_SESSION['user_id']);
 
             echo json_encode([
                 'status' => 'success',
@@ -121,23 +126,21 @@ class Dashboard extends Controller
                 'status' => 'error',
                 'message' => $e->getMessage()
             ]);
-
-            exit;
         }
     }
 
     public function changeBookmarksPrivacy(): void
     {
         if (!$this->request->isXMLHttpRequest())
-            exit;
+            throw new \ErrorException('', 403);
 
-        if ($this->isEmpty($_POST['bool']))
-            exit;
+        if (!$this->formFields('POST', ['bool']))
+            echo json_encode(['status' => 'error']);
 
-        $bool = filter_var($this->sanitizeInput($_POST['bool']), FILTER_VALIDATE_BOOLEAN);
+        $bool = $this->sanitizeInput($_POST['bool']);
 
         echo json_encode([
-            'status' => ((new User)->setVisibility($_SESSION['user_id'], $bool)) ? 'success' : 'error'
+            'status' => ($this->user_model->setVisibility($_SESSION['user_id'], $bool)) ? 'success' : 'error'
         ]);
     }
 }

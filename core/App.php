@@ -18,8 +18,11 @@ class App
 
     public function run()
     {
+        error_reporting(E_ALL);
         set_error_handler([$this->error, 'errorHandler']);
         set_exception_handler([$this->error, 'exceptionHandler']);
+
+        session_start();
 
         $this->request = new Request();
         $this->router = new Router();

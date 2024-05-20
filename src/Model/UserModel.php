@@ -3,7 +3,7 @@ namespace src\Model;
 
 use core\Model, PDO, Exception;
 
-class User extends Model
+class UserModel extends Model
 {
     private int $min_username_length = 4;
     private int $min_password_length = 4;
@@ -231,8 +231,10 @@ class User extends Model
      * @param  bool $bool
      * @return bool
      */
-    public function setVisibility(string $user_id, bool $bool): bool
+    public function setVisibility(string $user_id, string $bool): bool
     {
+        $bool = filter_var($bool, FILTER_VALIDATE_BOOLEAN);
+
         $query = $this->db()->prepare('UPDATE user SET is_public = :bool WHERE user.id = :user_id');
 
         return $query->execute([
@@ -295,6 +297,25 @@ class User extends Model
         $data_fetch = $query->fetch(PDO::FETCH_ASSOC);
 
         return $data_fetch['username'] ?? null;
+    }
+
+    /**
+     * Get user id by email.
+     *
+     * @param  mixed $email
+     * @return mixed
+     */
+    public function getIdByEmail(string $email): mixed
+    {
+        $query = $this->db()->prepare('SELECT user.id FROM user WHERE user.email = :email');
+
+        $query->execute([
+            ':email' => $email
+        ]);
+
+        $data_fetch = $query->fetch(PDO::FETCH_ASSOC);
+
+        return $data_fetch['id'] ?? null;
     }
 
     /**

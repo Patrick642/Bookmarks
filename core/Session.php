@@ -4,13 +4,14 @@ namespace core;
 
 class Session
 {
-    public function createSession(array $variables = [])
+    public function setUserId(string $user_id)
     {
-        $new_session_id = session_create_id();
-        $_SESSION['SID'] = $new_session_id;
-        foreach ($variables as $k => $v) {
-            $_SESSION[$k] = $v;
-        }
+        $_SESSION['user_id'] = $user_id;
+    }
+
+    public function setUsername(string $username)
+    {
+        $_SESSION['username'] = $username;
     }
 
     public function deleteSession()

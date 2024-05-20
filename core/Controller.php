@@ -4,10 +4,16 @@ namespace core;
 abstract class Controller
 {
     protected Request $request;
+    protected View $view;
+    protected SessionMessage $sessionMessage;
+    protected Session $session;
 
     public function __construct()
     {
         $this->request = new Request();
+        $this->view = new View();
+        $this->sessionMessage = new SessionMessage();
+        $this->session = new Session();
     }
 
     protected function sanitizeInput(mixed $input): mixed
@@ -17,14 +23,25 @@ abstract class Controller
         return $input;
     }
 
-    protected function isEmpty(mixed $input): bool
+    function formFields(string $method, array $fields = [])
     {
-        if (!isset ($input))
-            return true;
+        switch ($method) {
+            case 'POST':
+                $array = $_POST;
+                break;
+            case 'GET':
+                $array = $_GET;
+                break;
+            default:
+                return false;
+        }
 
-        if (empty ($input))
-            return true;
+        foreach ($fields as $field) {
+            if (!isset($array[$field]) || empty($this->sanitizeInput($array[$field]))) {
+                return false;
+            }
+        }
 
-        return false;
+        return true;
     }
 }

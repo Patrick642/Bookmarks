@@ -3,7 +3,7 @@ namespace src\Model;
 
 use core\Model, PDO;
 
-class Bookmark extends Model
+class BookmarkModel extends Model
 {
     /**
      * add

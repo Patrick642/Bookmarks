@@ -1,12 +1,12 @@
 <?php
 namespace src\Controller;
 
-use core\View;
+use core\Controller;
 
-class Home
+class Home extends Controller
 {
     public function index(): void
     {
-        (new View)->getView('home');
+        $this->view->get('home/index.phtml');
     }
 }

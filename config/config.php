@@ -1,4 +1,7 @@
 <?php
+/* Application environment (dev/prod) */
+define('ENV', 'prod');
+
 /* Base paths */
 define('ROOT_DIR', __DIR__ . '/../');
 define('BASE_URL', (empty($_SERVER['HTTPS']) ? 'http' : 'https') . '://' . $_SERVER['HTTP_HOST']);

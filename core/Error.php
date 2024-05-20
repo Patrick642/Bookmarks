@@ -31,14 +31,14 @@ class Error
 
         $code = $exception->getCode();
 
-        if ($code !== 404) {
+        if ($code !== 403 && $code !== 404) {
             $code = 500;
             $this->logError($msg);
         }
 
         http_response_code($code);
 
-        (new View)->getView($code);
+        (new View)->get('error/' . $code . '.phtml');
     }
 
     /**

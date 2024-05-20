@@ -1,53 +1,46 @@
 <?php
 namespace src\Controller;
 
-use core\Controller, core\Session, core\View, src\Model\User;
+use core\Controller, src\Model\UserModel;
 
 class SignUp extends Controller
 {
     public function index(): void
     {
-        (new View)->getView('signup', [
+        $this->view->get('signup/index.phtml', [
             'page_title' => 'Sign up - Bookmarks'
         ]);
     }
 
     public function signUp(): void
     {
-        if (!$this->request->isXMLHttpRequest())
-            exit;
-
-        try {
-            if ($this->isEmpty($_POST['username']) || $this->isEmpty($_POST['email']) || $this->isEmpty($_POST['pswd']) || $this->isEmpty($_POST['pswd_repeat']))
-                throw new \Exception('Not all required fields are filled.');
-
-            $username = $this->sanitizeInput($_POST['username']);
-            $email = $this->sanitizeInput($_POST['email']);
-            $pswd = $this->sanitizeInput($_POST['pswd']);
-            $pswd_repeat = $this->sanitizeInput($_POST['pswd_repeat']);
-
-            $user_model = new User();
-
-            $user_model->add($username, $email, $pswd, $pswd_repeat);
-
-            $user = $user_model->get($email, $pswd);
-
-            (new Session)->createSession([
-                'user_id' => $user['id'],
-                'username' => $user['username']
-            ]);
-
-            echo json_encode([
-                'status' => 'success'
-            ]);
-
-        } catch (\Exception $e) {
-            echo json_encode([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ]);
-
+        if (!$this->formFields('POST', ['username', 'email', 'pswd', 'pswd_repeat'])) {
+            $this->sessionMessage->set('Not all required fields are filled.');
+            header('Location: /signup');
             exit;
         }
+
+        $username = $this->sanitizeInput($_POST['username']);
+        $email = $this->sanitizeInput($_POST['email']);
+        $pswd = $this->sanitizeInput($_POST['pswd']);
+        $pswd_repeat = $this->sanitizeInput($_POST['pswd_repeat']);
+
+        $user_model = new UserModel();
+
+        try {
+            $user_model->add($username, $email, $pswd, $pswd_repeat);
+            $user = $user_model->get($email, $pswd);
+        } catch (\Exception $e) {
+            $this->sessionMessage->set($e->getMessage());
+            header('Location: /signup');
+            exit;
+        }
+
+        session_regenerate_id(true);
+
+        $this->session->setUserId($user['id']);
+        $this->session->setUsername($user['username']);
+
+        header('Location: /dashboard');
     }
 }

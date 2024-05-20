@@ -1,16 +1,14 @@
 <?php
 namespace src\Controller;
 
-use core\Session;
+use core\Controller;
 
-class SignOut
+class SignOut extends Controller
 {
     public function index(): void
     {
-        $session_controller = new Session;
+        $this->session->deleteSession();
 
-        $session_controller->deleteSession();
-        
         header('Location: /');
     }
 }

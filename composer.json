@@ -9,8 +9,7 @@
             "core\\": "core/"
         },
         "files": [
-            "config/config.php",
-            "config/db.php"
+            "config/config.php"
         ]
     },
     "authors": [
@@ -21,6 +20,7 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "php": "^8.2"
+        "php": "^8.2",
+        "phpmailer/phpmailer": "^6.9"
     }
 }

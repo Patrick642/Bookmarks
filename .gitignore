@@ -1,4 +1,5 @@
 vendor
 composer.lock
+config/*_local.php
 log/*
 !log/.gitkeep

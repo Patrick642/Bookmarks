@@ -1,9 +1,10 @@
 # Bookmarks
-An application for storing and sharing bookmarks written in pure PHP. 
+An application for storing and sharing bookmarks written in PHP. 
 
 ## Requirements
   * PHP 8.2.0 or higher
   * MySQL database engine
+  * SMTP mail server
   * Composer
   * Git (optional, if you decide to clone the repository instead of manual downloading)
 
@@ -24,10 +25,10 @@ git clone https://github.com/Patrick642/Bookmarks.git
 cd Bookmarks
 ```
 
-**3.** Set up application dependencies:
+**3.** Install required packages and create autoload file:
 
 ```
-composer dump-autoload
+composer install
 ```
 
 **4.** Create a new database.
@@ -35,3 +36,5 @@ composer dump-autoload
 **5.** Import `data/bookmarks.sql` file to create a schema for the newly created database.
 
 **6.** Go to `config/db.php` and set database connection details.
+
+**7.** Go to `config/mailer.php` and set mailer settings.

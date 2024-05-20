@@ -1,30 +1,37 @@
 <?php
 namespace src\Controller;
 
-use core\Controller, core\Session, core\View, src\Model\User;
+use core\Controller, src\Model\UserModel;
 
 class Settings extends Controller
 {
+    private UserModel $user_model;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->user_model = new UserModel();
+    }
+
     public function index(): void
     {
-        (new View)->getView('settings', [
+        $this->view->get('settings/index.phtml', [
             'page_title' => 'Settings - Bookmarks',
-            'user_email' => (new User)->getEmail($_SESSION['user_id'])
+            'user_email' => $this->user_model->getEmail($_SESSION['user_id'])
         ]);
     }
 
     public function changeEmail(): void
     {
         if (!$this->request->isXMLHttpRequest())
-            exit;
+            throw new \ErrorException('', 403);
 
         try {
-            if ($this->isEmpty($_POST['email']))
+            if (!$this->formFields('POST', ['email']))
                 throw new \Exception('Enter a new email address.');
 
             $email = $this->sanitizeInput($_POST['email']);
-
-            (new User)->changeEmail($_SESSION['user_id'], $email);
+            $this->user_model->changeEmail($_SESSION['user_id'], $email);
 
             echo json_encode([
                 'status' => 'success'
@@ -35,21 +42,19 @@ class Settings extends Controller
                 'status' => 'error',
                 'message' => $e->getMessage()
             ]);
-
-            exit;
         }
     }
 
     public function changePassword(): void
     {
         if (!$this->request->isXMLHttpRequest())
-            exit;
+            throw new \ErrorException('', 403);
 
         try {
-            if ($this->isEmpty($_POST['pswd']) || $this->isEmpty($_POST['pswd_repeat']))
+            if (!$this->formFields('POST', ['pswd', 'pswd_repeat']))
                 throw new \Exception('Not all required fields are filled.');
 
-            (new User)->changePassword($_SESSION['user_id'], $_POST['pswd'], $_POST['pswd_repeat']);
+            $this->user_model->changePassword($_SESSION['user_id'], $_POST['pswd'], $_POST['pswd_repeat']);
 
             echo json_encode([
                 'status' => 'success'
@@ -60,25 +65,23 @@ class Settings extends Controller
                 'status' => 'error',
                 'message' => $e->getMessage()
             ]);
-
-            exit;
         }
     }
 
     public function deleteAccount(): void
     {
         if (!$this->request->isXMLHttpRequest())
-            exit;
+            throw new \ErrorException('', 403);
 
         try {
-            if ($this->isEmpty($_POST['pswd_confirmation']))
+            if (!$this->formFields('POST', ['pswd_confirmation']))
                 throw new \Exception('Enter the password.');
 
             $pswd_confirmation = $this->sanitizeInput($_POST['pswd_confirmation']);
 
-            (new User)->delete($_SESSION['user_id'], $pswd_confirmation);
+            $this->user_model->delete($_SESSION['user_id'], $pswd_confirmation);
 
-            (new Session())->deleteSession();
+            $this->session->deleteSession();
 
             echo json_encode([
                 'status' => 'success'
@@ -89,8 +92,6 @@ class Settings extends Controller
                 'status' => 'error',
                 'message' => $e->getMessage()
             ]);
-
-            exit;
         }
     }
 }
