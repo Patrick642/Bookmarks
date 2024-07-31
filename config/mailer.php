@@ -7,4 +7,4 @@ define('MAIL_HOST', '');
 define('MAIL_USERNAME', '');
 define('MAIL_PASSWORD', '');
 define('MAIL_PORT', '');
-define('MAIL_SENDER', '');
+define('MAIL_SENDER', 'bookmarks@example.com');

@@ -5,12 +5,9 @@
         <div class="card">
             <div class="card-body">
                 <div class="container-logo">
-                    <a href="__baseUrl__">Bookmarks</a>
+                    <a href="<?= $baseUrl ?>">Bookmarks</a>
                 </div>
-                <h1 class="card-title">Password reset.</h1>
-                <p>Click the button below to reset your password. The link is valid for __timeValid__ minutes after sending the password change request.</p>
-                <a class="password-reset-button" href="__resetLink__" target="_blank">Reset my password</a>
-                <p class="text-secondary text-center">If you did not ask to change your password, please ignore this message.</p>
+                <p class="text-center">Your account has been deleted. Thank you for using the service.</p>
             </div>
         </div>
     </div>
@@ -76,7 +73,6 @@
         margin-top: 0;
         font-weight: 500;
         line-height: 1.2;
-        text-align: center;
     }
 
     .password-reset-button {

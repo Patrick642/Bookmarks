@@ -1,8 +1,6 @@
 <?php
 namespace core;
 
-use core\Route\Router;
-
 class App
 {
     protected Router $router;

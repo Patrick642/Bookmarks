@@ -58,12 +58,9 @@ nav.navbar {
     color: inherit;
 }
 
-.add-button {
-    bottom: 32px;
-    right: 32px;
+.dashboard-action-button {
     width: 64px;
     height: 64px;
-    z-index: 2;
 }
 
 .form-check-input {

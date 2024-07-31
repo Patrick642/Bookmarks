@@ -1,43 +1,47 @@
 <?php
 namespace src\Controller;
 
-use core\Controller, src\Model\UserModel;
+use core\Controller;
+use src\Model\User\UserModel;
 
 class SignIn extends Controller
 {
+    private UserModel $userModel;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->userModel = new UserModel();
+    }
+
     public function index(): void
     {
         $this->view->get('signin/index.phtml', [
-            'page_title' => 'Sign in - Bookmarks'
+            'pageTitle' => 'Sign in - Bookmarks'
         ]);
     }
 
     public function signIn(): void
     {
-        if (!$this->formFields('POST', ['login', 'pswd'])) {
-            $this->sessionMessage->set('Not all required fields are filled.');
-            header('Location: /signin');
-            exit;
+        if (!$this->requiredInputs('POST', ['login', 'pswd'])) {
+            $this->session->setFlashMessage('Not all required fields are filled.');
+            $this->redirect('/signin');
         }
 
-        $login = $this->sanitizeInput($_POST['login']);
-        $pswd = $this->sanitizeInput($_POST['pswd']);
+        $login = $this->dataUtility->sanitizeInput($_POST['login']);
+        $pswd = $this->dataUtility->sanitizeInput($_POST['pswd']);
 
-        $user_model = new UserModel();
+        if ($this->userModel->checkCredentials($login, $pswd)) {
+            $userId = $this->userModel->getIdByEmail($login) ?? $this->userModel->getIdByUsername($login);
 
-        try {
-            $user = $user_model->get($login, $pswd);
-        } catch (\Exception $e) {
-            $this->sessionMessage->set($e->getMessage());
-            header('Location: /signin');
-            exit;
+            $this->session->regenerateId();
+            $this->session->setUserId($userId);
+            $this->session->setUsername($this->userModel->getUsername($userId));
+
+            $this->redirect('/dashboard');
         }
 
-        session_regenerate_id(true);
-
-        $this->session->setUserId($user['id']);
-        $this->session->setUsername($user['username']);
-
-        header('Location: /dashboard');
+        $this->session->setFlashMessage($this->userModel->validator->getError());
+        $this->redirect('/signin');
     }
 }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 20, 2024 at 08:07 AM
+-- Generation Time: Jul 29, 2024 at 04:45 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -30,8 +30,23 @@ SET time_zone = "+00:00";
 CREATE TABLE `bookmark` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `title` varchar(64) NOT NULL,
-  `url` varchar(255) NOT NULL
+  `label` varchar(64) NOT NULL,
+  `url` varchar(2048) NOT NULL,
+  `updated_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `email_verification`
+--
+
+CREATE TABLE `email_verification` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `auth_key` varchar(255) NOT NULL,
+  `expires_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -42,9 +57,9 @@ CREATE TABLE `bookmark` (
 
 CREATE TABLE `password_reset` (
   `id` int(11) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `reset_key` varchar(255) NOT NULL,
-  `expire` datetime NOT NULL
+  `user_id` int(11) NOT NULL,
+  `auth_key` varchar(255) NOT NULL,
+  `expires_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -59,7 +74,8 @@ CREATE TABLE `user` (
   `email` varchar(255) NOT NULL,
   `password_hash` varchar(60) NOT NULL,
   `is_public` tinyint(1) NOT NULL,
-  `date_joined` datetime NOT NULL DEFAULT current_timestamp()
+  `date_joined` datetime NOT NULL,
+  `is_valid` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -74,10 +90,20 @@ ALTER TABLE `bookmark`
   ADD KEY `fk_bookmark_user_user_id` (`user_id`);
 
 --
+-- Indexes for table `email_verification`
+--
+ALTER TABLE `email_verification`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `auth_key` (`auth_key`),
+  ADD KEY `fk_email_verification_user_user_id` (`user_id`);
+
+--
 -- Indexes for table `password_reset`
 --
 ALTER TABLE `password_reset`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `auth_key` (`auth_key`),
+  ADD KEY `fk_password_reset_user_user_id` (`user_id`);
 
 --
 -- Indexes for table `user`
@@ -95,6 +121,12 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `bookmark`
 --
 ALTER TABLE `bookmark`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100000001;
+
+--
+-- AUTO_INCREMENT for table `email_verification`
+--
+ALTER TABLE `email_verification`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100000001;
 
 --
@@ -117,7 +149,19 @@ ALTER TABLE `user`
 -- Constraints for table `bookmark`
 --
 ALTER TABLE `bookmark`
-  ADD CONSTRAINT `fk_bookmark_user_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
+  ADD CONSTRAINT `fk_bookmark_user_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `email_verification`
+--
+ALTER TABLE `email_verification`
+  ADD CONSTRAINT `fk_email_verification_user_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `password_reset`
+--
+ALTER TABLE `password_reset`
+  ADD CONSTRAINT `fk_password_reset_user_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

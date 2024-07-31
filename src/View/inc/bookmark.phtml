@@ -1,0 +1,54 @@
+<div class="bookmark-card mx-auto my-4 bg-primary-subtle border border-primary text-white">
+    <div class="bookmark-card-body d-flex flex-row">
+        <a target="_blank" class="bookmark-link w-100 d-flex flex-column justify-content-center" title="<?= $bookmark['url'] ?>" href="<?= $bookmark['url'] ?>">
+            <h5 class="w-100 fw-bold mb-0"><?= $bookmark['label'] ?></h5>
+            <h6 class="w-100 fw-lighter mb-0 text-body-secondary"><?= $bookmark['url'] ?></h6>
+        </a>
+        <div class="dropdown">
+            <button class="bookmark-dropdown-button border-0 bg-transparent" id="bookmarkMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                <svg class="icon icon-tabler" width="24" height="24" viewBox="0 0 24 24">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M5 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                    <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                    <path d="M19 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                </svg>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="bookmarkMenu">
+                <li>
+                    <button class="dropdown-item" bookmark-copyurl="<?= $bookmark['url'] ?>">
+                        <svg class="icon icon-tabler" width="24" height="24" viewBox="0 0 24 24">
+                            <path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" />
+                            <path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" />
+                        </svg>
+                        Copy link
+                    </button>
+                </li>
+                <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $bookmark['user_id']): ?>
+                    <li>
+                        <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editBookmarkModal" data-id="<?= $bookmark['id'] ?>">
+                            <svg class="icon icon-tabler" width="24" height="24" viewBox="0 0 24 24">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
+                                <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
+                                <path d="M16 5l3 3" />
+                            </svg>
+                            Edit
+                        </button>
+                    </li>
+                    <li>
+                        <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteBookmarkModal" data-id="<?= $bookmark['id'] ?>">
+                            <svg class="icon icon-tabler" width="24" height="24" viewBox="0 0 24 24">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M4 7h16" />
+                                <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                                <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                                <path d="M10 12l4 4m0 -4l-4 4" />
+                            </svg>
+                            Delete
+                        </button>
+                    </li>
+                <?php endif; ?>
+            </ul>
+        </div>
+    </div>
+</div>

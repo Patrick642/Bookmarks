@@ -1,0 +1,36 @@
+<?php include_once PAGE_HEADER; ?>
+<?php include_once PAGE_NAVBAR; ?>
+<div class="container-xl">
+    <main class="my-5 d-flex justify-content-center align-items-center">
+        <div class="card form-card bg-body-tertiary">
+            <div class="card-body">
+                <div class="col-12 mb-4">
+                    <h3 class="text-center">Delete your account</h3>
+                    <p>Are you sure you want to delete your account? All your saved bookmarks will be deleted forever. <b>You can't undo this action.</b></p>
+                </div>
+                <form method="POST" action="/account_delete">
+                    <div class="col-12 mb-4">
+                        <div class="form-floating">
+                            <input type="password" class="form-control" id="pswd_confirmation" name="pswd_confirmation" placeholder="Password" required>
+                            <label for="pswd_confirmation">Confirm your decision by entering your password:</label>
+                        </div>
+                    </div>
+                    <?php if ($session_message !== null): ?>
+                        <div class="col-12 mb-4">
+                            <div class="alert alert-danger mb-0" role="alert"><?= $session_message ?></div>
+                        </div>
+                    <?php endif; ?>
+                    <div class="col-12 mb-4">
+                        <button class="btn btn-lg btn-danger w-100" name="submit">Delete account</button>
+                    </div>
+                </form>
+                <div class="col-12">
+                    <span class="d-flex flex-column align-items-center">
+                        <a href="/settings">BACK</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+<?php include_once PAGE_FOOTER; ?>

@@ -11,7 +11,7 @@
                 <form method="POST" action="/signup">
                     <div class="col-12 mb-4">
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Username" minlength="<?= $minUsernameLength ?>" maxlength="<?= $maxUsernameLength ?>" required>
                             <label class="form-label" for="username">Username (must be unique):</label>
                         </div>
                     </div>
@@ -23,19 +23,19 @@
                     </div>
                     <div class="col-12 mb-4">
                         <div class="form-floating">
-                            <input type="password" class="form-control" id="pswd" name="pswd" placeholder="Password" required>
+                            <input type="password" class="form-control" id="pswd" name="pswd" placeholder="Password" minlength="<?= $minPasswordLength ?>" required>
                             <label class="form-label" for="pswd">Password:</label>
                         </div>
                     </div>
                     <div class="col-12 mb-4">
                         <div class="form-floating">
-                            <input type="password" class="form-control" id="pswd_repeat" name="pswd_repeat" placeholder="Password repeat" required>
+                            <input type="password" class="form-control" id="pswd_repeat" name="pswd_repeat" placeholder="Password repeat" minlength="<?= $minPasswordLength ?>" required>
                             <label class="form-label" for="pswd_repeat">Password repeat:</label>
                         </div>
                     </div>
                     <?php if ($session_message !== null): ?>
                         <div class="col-12 mb-4">
-                            <div class="alert alert-danger" role="alert"><?= $session_message ?></div>
+                            <div class="alert alert-danger mb-0" role="alert"><?= $session_message ?></div>
                         </div>
                     <?php endif; ?>
                     <div class="col-12 mb-4">

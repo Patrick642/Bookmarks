@@ -1,0 +1,20 @@
+<?php include_once PAGE_HEADER; ?>
+<?php include_once PAGE_NAVBAR; ?>
+<div class="container-xl">
+    <main class="d-flex justify-content-center align-items-center">
+        <div class="my-5 card form-card bg-body-tertiary">
+            <div class="card-body">
+                <div class="col-12 mb-4">
+                    <h3 class="text-center">Verification email sent</h3>
+                    <p>To use the application, you must first verify your email address. A special account activation link has been sent to <b><?= $email ?></b>. Please check your mailbox and click on this link.</p>
+                </div>
+                <div class="col-12">
+                    <span class="d-flex flex-column align-items-center">
+                        <a href="/complete_registration/send">Send verification email again</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+<?php include_once PAGE_FOOTER; ?>

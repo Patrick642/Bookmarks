@@ -5,24 +5,47 @@ class View
 {
     const VIEW_DIR = ROOT_DIR . '/src/View/';
 
-    private SessionMessage $sessionMessage;
+    private Session $session;
 
     public function __construct()
     {
-        $this->sessionMessage = new SessionMessage();
+        $this->session = new Session();
     }
 
-    public function get(string $view_name, array $variables = []): void
+    /**
+     * Include view.
+     *
+     * @param  string $viewName
+     * @param  array $variables
+     * @return void
+     */
+    public function get(string $viewName, array $variables = []): void
     {
-        $variables['session_message'] = $this->sessionMessage->get();
-        $file_path = self::VIEW_DIR . $view_name;
+        $variables['session_message'] = $this->session->getFlashMessage();
+        $filePath = self::VIEW_DIR . $viewName;
 
         extract($variables);
 
-        if (!file_exists($file_path)) {
-            throw new \ErrorException('View ' . $view_name . ' not found!');
+        if (!file_exists($filePath)) {
+            throw new \ErrorException('View ' . $viewName . ' not found!');
         }
 
-        $view = include_once ($file_path);
+        include $filePath;
+    }
+
+    /**
+     * Include view and return it as a string.
+     *
+     * @param  string $viewName
+     * @param  array $variables
+     * @return string
+     */
+    public function getString(string $viewName, array $variables = []): string
+    {
+        ob_start();
+        $this->get($viewName, $variables);
+        $string = ob_get_clean();
+
+        return $string;
     }
 }

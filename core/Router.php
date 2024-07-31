@@ -1,23 +1,30 @@
 <?php
-namespace core\Route;
+namespace core;
 
 use core\Middleware\Middleware;
 
 class Router
 {
+    private Request $request;
     private array $routes = [];
+
+    public function __construct()
+    {
+        $this->request = new Request();
+    }
 
     private function registerRoutes()
     {
-        $routes_list = include_once ROOT_DIR . '/core/Route/routes.php' ?? [];
+        $routeList = include_once ROOT_DIR . '/src/routes.php' ?? [];
 
-        foreach ($routes_list as $r) {
+        foreach ($routeList as $r) {
             array_push($this->routes, [
                 'method' => strtoupper($r[0]),
                 'path' => strtolower(rtrim($r[1], '/')),
                 'controller' => $r[2],
                 'action' => str_replace('()', '', $r[3]),
-                'middleware' => $r[4] ?? null
+                'middleware' => $r[4] ?? null,
+                'XMLHttpRequest' => $r[5] ?? false
             ]);
         }
     }
@@ -33,15 +40,18 @@ class Router
                 if ($middleware !== null)
                     (new $middleware)->handle();
 
-                $class_name = '\src\Controller\\' . $route['controller'];
+                $className = '\src\Controller\\' . $route['controller'];
 
-                if (!class_exists($class_name))
+                if (!class_exists($className))
                     throw new \ErrorException('Controller ' . $route['controller'] . ' does not exist.');
 
-                if (!method_exists($class_name, $route['action']))
-                    throw new \ErrorException('Method  ' . $route['action'] . ' of the class ' . $route['controller'] . ' does not exist.');
+                if (!method_exists($className, $route['action']))
+                    throw new \ErrorException('Method "' . $route['action'] . '" of the class "' . $route['controller'] . '" does not exist.');
 
-                $instance = new $class_name;
+                if ($this->request->isXMLHttpRequest() !== $route['XMLHttpRequest'])
+                    throw new \ErrorException('', 403);
+
+                $instance = new $className;
                 $instance->{$route['action']}();
 
                 exit;

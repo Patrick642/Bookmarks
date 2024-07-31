@@ -15,42 +15,26 @@
                 </svg>
             </button>
         </div>
-        <?php if ($is_public === false): ?>
+        <?php if (!$isPublic): ?>
             <p class="text-secondary text-center">Bookmarks of this user are private</p>
         <?php else: ?>
-            <?php if (count($data) === 0): ?>
+            <?php if (count($bookmarks) === 0): ?>
                 <p class="text-secondary text-center">Currently this user has no bookmarks</p>
             <?php endif; ?>
-            <?php foreach ($data as $r): ?>
-                <div class="bookmark-card mx-auto my-4 bg-primary bg-gradient text-white">
-                    <div class="bookmark-card-body d-flex flex-row">
-                        <a target="_blank" class="bookmark-link w-100" title="<?= $r['url'] ?>" href="<?= (parse_url($r['url'], PHP_URL_SCHEME) === null) ? '//' . $r['url'] : $r['url'] ?>">
-                            <?= $r['title'] ?>
-                        </a>
-                        <div class="dropdown">
-                            <button class="bookmark-dropdown-button border-0 bg-transparent" id="bookmarkMenu" data-bs-toggle="dropdown" aria-expanded="false">
-                                <svg class="icon icon-tabler" width="24" height="24" viewBox="0 0 24 24">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M5 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-                                    <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-                                    <path d="M19 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-                                </svg>
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="bookmarkMenu">
-                                <li>
-                                    <button class="dropdown-item" bookmark-copyurl="<?= $r['url'] ?>">
-                                        <svg class="icon icon-tabler" width="24" height="24" viewBox="0 0 24 24">
-                                            <path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" />
-                                            <path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" />
-                                        </svg>
-                                        Copy link
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+            <div class="col bookmarks">
+                <?php
+                foreach ($bookmarks as $bookmark)
+                    include ROOT_DIR . '/src/View/inc/bookmark.phtml';
+                ?>
+            </div>
+            <?php if ($userHasMoreBookmarks): ?>
+                <div class="col d-flex justify-content-center align-items-center mb-3">
+                    <button class="btn btn-lg btn-primary" data-id="<?= $userId ?>" id="infiniteScrollButton">
+                        <span class="spinner-border spinner-border-sm d-none"></span>
+                        <span role="status">Load more bookmarks</span>
+                    </button>
                 </div>
-            <?php endforeach; ?>
+            <?php endif; ?>
         <?php endif; ?>
     </main>
 </div>
@@ -65,7 +49,7 @@
             </div>
             <div class="modal-body">
                 <div class="input-group">
-                    <input type="text" class="form-control" id="bookmarksShareLink" value="<?= BASE_URL . '/b?u=' . $username ?>" disabled readonly>
+                    <input type="text" class="form-control" id="bookmarksShareLink" value="<?= BASE_URL . '/shared?u=' . $username ?>" disabled readonly>
                     <button class="input-group-text" id="copyBookmarksShareLink">
                         <svg class="icon icon-tabler" width="24" height="24" viewBox="0 0 24 24">
                             <path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" />

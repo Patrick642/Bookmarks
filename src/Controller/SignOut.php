@@ -7,8 +7,8 @@ class SignOut extends Controller
 {
     public function index(): void
     {
-        $this->session->deleteSession();
+        $this->session->destroy();
 
-        header('Location: /');
+        $this->redirect('/');
     }
 }

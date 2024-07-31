@@ -10,7 +10,7 @@
                 </div>
                 <?php if ($email === null): ?>
                     <div class="col-12 mb-4">
-                        <div class="alert alert-danger text-center" role="alert"><?= $session_message ?? '' ?></div>
+                        <div class="alert alert-danger mb-0 text-center" role="alert"><?= $session_message ?? '' ?></div>
                     </div>
                     <div class="col-12">
                         <span class="d-flex flex-column align-items-center">
@@ -24,22 +24,22 @@
                     <form method="POST" action="/password_reset/reset">
                         <div class="col-12 mb-4">
                             <div class="form-floating">
-                                <input type="password" class="form-control" id="pswd" name="pswd" placeholder="Password" required>
+                                <input type="password" class="form-control" id="pswd" name="pswd" placeholder="Password" minlength="<?= $minPasswordLength ?>" required>
                                 <label class="form-label" for="pswd">Password:</label>
                             </div>
                         </div>
                         <div class="col-12 mb-4">
                             <div class="form-floating">
-                                <input type="password" class="form-control" id="pswd_repeat" name="pswd_repeat" placeholder="Password repeat" required>
+                                <input type="password" class="form-control" id="pswd_repeat" name="pswd_repeat" placeholder="Password repeat" minlength="<?= $minPasswordLength ?>" required>
                                 <label class="form-label" for="pswd_repeat">Password repeat:</label>
                             </div>
                         </div>
                         <?php if ($session_message !== null): ?>
                             <div class="col-12 mb-4">
-                                <div class="alert alert-danger" role="alert"><?= $session_message ?></div>
+                                <div class="alert alert-danger mb-0" role="alert"><?= $session_message ?></div>
                             </div>
                         <?php endif; ?>
-                        <input type="hidden" name="reset_key" value="<?= $_GET['key'] ?? ''; ?>">
+                        <input type="hidden" name="auth_key" value="<?= $_GET['auth_key'] ?? ''; ?>">
                         <div class="col-12">
                             <button class="btn btn-lg btn-primary w-100" name="submit">Change</button>
                         </div>

@@ -1,4 +1,6 @@
 <?php
+/* This config file is included in composer.json */
+
 /* Application environment (dev/prod) */
 define('ENV', 'prod');
 

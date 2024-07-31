@@ -3,27 +3,20 @@ namespace core;
 
 abstract class Controller
 {
+    protected DataUtility $dataUtility;
     protected Request $request;
-    protected View $view;
-    protected SessionMessage $sessionMessage;
     protected Session $session;
+    protected View $view;
 
     public function __construct()
     {
+        $this->dataUtility = new DataUtility();
         $this->request = new Request();
-        $this->view = new View();
-        $this->sessionMessage = new SessionMessage();
         $this->session = new Session();
+        $this->view = new View();
     }
 
-    protected function sanitizeInput(mixed $input): mixed
-    {
-        $input = trim($input);
-        $input = htmlspecialchars($input);
-        return $input;
-    }
-
-    function formFields(string $method, array $fields = [])
+    public function requiredInputs(string $method, array $fields = []): bool
     {
         switch ($method) {
             case 'POST':
@@ -37,11 +30,23 @@ abstract class Controller
         }
 
         foreach ($fields as $field) {
-            if (!isset($array[$field]) || empty($this->sanitizeInput($array[$field]))) {
+            if (!isset($array[$field]) || empty($this->dataUtility->sanitizeInput($array[$field]))) {
                 return false;
             }
         }
 
         return true;
+    }
+
+    public function redirect(string $location): void
+    {
+        header('Location: ' . $location);
+        exit;
+    }
+
+    public function jsonEncode(array $parameters = [], bool $success = true, ?string $message = null): void
+    {
+        echo json_encode(array_merge(['success' => $success, 'message' => $message], $parameters));
+        exit;
     }
 }

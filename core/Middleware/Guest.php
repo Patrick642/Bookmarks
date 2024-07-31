@@ -1,11 +1,15 @@
 <?php
 namespace core\Middleware;
 
+use core\Session;
+
 class Guest
 {
     public function handle()
     {
-        if (isset($_SESSION['user_id'])) {
+        $session = new Session();
+
+        if ($session->getUserId() !== null) {
             header('Location: /');
             exit;
         }

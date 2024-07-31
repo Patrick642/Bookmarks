@@ -2,6 +2,14 @@
 <?php include_once PAGE_NAVBAR; ?>
 <div class="container-xl">
     <main class="my-5">
+        <?php if ($session_message !== null): ?>
+            <div class="col mb-4">
+                <div class="alert alert-info mb-0 alert-dismissible fade show" role="alert">
+                    <?= $session_message ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+        <?php endif; ?>
         <h3>Settings</h3>
         <div class="card my-4">
             <ul class="list-group list-group-flush">
@@ -10,12 +18,11 @@
                         <div class="d-flex flex-column justify-content-center gap-2">
                             <text>Your email address:</text>
                             <text>
-                                <?= $user_email ?>
+                                <?= $userEmail ?>
                             </text>
                         </div>
                         <div class="d-flex align-items-center">
-                            <button class="btn text-primary" data-bs-toggle="modal" data-bs-target="#changeEmailModal">Change
-                                email</button>
+                            <button class="btn text-primary" data-bs-toggle="modal" data-bs-target="#changeEmailModal">Change email</button>
                         </div>
                     </div>
                 </li>
@@ -35,7 +42,7 @@
                             <text>Deleting account</text>
                         </div>
                         <div class="d-flex flex-column">
-                            <button class="btn text-danger" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">Delete</button>
+                            <a class="btn text-danger" href="/account_delete">Delete</a>
                         </div>
                     </div>
                 </li>
@@ -43,6 +50,7 @@
         </div>
     </main>
 </div>
+
 <!-- Change user email modal -->
 <div class="modal" id="changeEmailModal" tabindex="-1" aria-labelledby="changeEmailModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -67,6 +75,7 @@
         </div>
     </div>
 </div>
+
 <!-- Change user password modal -->
 <div class="modal" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -79,11 +88,11 @@
                 <form method="POST" action="/settings/change_password" id="changePasswordForm" class="d-flex flex-column gap-3 form-modal">
                     <div class="form-group">
                         <label for="password" class="form-label">Enter your new password:</label>
-                        <input type="password" class="form-control" id="password" name="pswd" required>
+                        <input type="password" class="form-control" id="password" name="pswd" minlength="<?= $minPasswordLength ?>" required>
                     </div>
                     <div class="form-group">
                         <label for="password_repeat" class="form-label">Repeat password:</label>
-                        <input type="password" class="form-control" id="password_repeat" name="pswd_repeat" required>
+                        <input type="password" class="form-control" id="password_repeat" name="pswd_repeat" minlength="<?= $minPasswordLength ?>" required>
                     </div>
                     <div class="alert-container"></div>
                 </form>
@@ -91,31 +100,6 @@
             <div class="modal-footer border-0">
                 <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
                 <button type="submit" form="changePasswordForm" class="btn btn-success">Save</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Delete account modal -->
-<div class="modal" id="deleteAccountModal" tabindex="-1" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header border-0">
-                <h1 class="modal-title fs-5" id="deleteAccountModalLabel">Delete this account</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to delete your account? All your saved bookmarks will be deleted forever. <b>You can't undo this action.</b></p>
-                <form method="POST" action="/settings/delete_account" id="deleteAccountForm" class="d-flex flex-column gap-3 form-modal">
-                    <div class="form-group">
-                        <label for="pswd_confirmation" class="form-label">Confirm your decision by entering your password:</label>
-                        <input type="password" class="form-control" id="pswd_confirmation" name="pswd_confirmation" required>
-                    </div>
-                    <div class="alert-container"></div>
-                </form>
-            </div>
-            <div class="modal-footer border-0">
-                <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
-                <button type="submit" form="deleteAccountForm" class="btn btn-danger">Delete account</button>
             </div>
         </div>
     </div>

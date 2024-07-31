@@ -2,123 +2,109 @@
 namespace Src\Controller;
 
 use core\Controller;
-use core\Email;
-use src\Model\PasswordResetModel;
-use src\Model\UserModel;
+use src\Model\PasswordReset\PasswordResetModel;
+use src\Model\User\UserModel;
+use src\Utility\AuthKey;
+use src\Utility\Emails;
 
 class PasswordReset extends Controller
 {
-    private PasswordResetModel $password_reset_model;
-    private UserModel $user_model;
+    private AuthKey $authKey;
+    private Emails $emails;
+    private PasswordResetModel $passwordResetModel;
+    private UserModel $userModel;
 
     public function __construct()
     {
         parent::__construct();
-        $this->password_reset_model = new PasswordResetModel();
-        $this->user_model = new UserModel();
+        $this->authKey = new AuthKey();
+        $this->emails = new Emails();
+        $this->passwordResetModel = new PasswordResetModel();
+        $this->userModel = new UserModel();
     }
 
     public function index(): void
     {
         $this->view->get('password_reset/index.phtml', [
-            'page_title' => 'Password reset - Bookmarks',
+            'pageTitle' => 'Password reset - Bookmarks',
         ]);
     }
 
     public function sendEmail(): void
     {
-        if (!$this->formFields('POST', ['email'])) {
-            $this->sessionMessage->set('Enter an email address.');
-            header('Location: /password_reset');
-            exit;
+        if (!$this->requiredInputs('POST', ['email'])) {
+            $this->session->setFlashMessage('Enter an email address.');
+            $this->redirect('/password_reset');
         }
 
-        $entered_email = $this->sanitizeInput($_POST['email']);
+        $enteredEmail = $this->dataUtility->sanitizeInput($_POST['email']);
+        $authKey = $this->authKey->generate();
 
-        $reset_key = $this->password_reset_model->generateKey();
-        $reset_link = BASE_URL . '/password_reset/reset?key=' . $reset_key;
+        if ($this->passwordResetModel->add($enteredEmail, $authKey)) {
+            $resetPasswordLink = BASE_URL . '/password_reset/reset?auth_key=' . $authKey;
 
-        try {
-            if ($this->user_model->getIdByEmail($entered_email) === null)
-                throw new \Exception($entered_email . ' is not associated with any account.');
+            if ($this->emails->sendPasswordResetLink($enteredEmail, $resetPasswordLink, $this->passwordResetModel::TIME_VALID))
+                $this->redirect('/password_reset/email_sent');
 
-            $this->password_reset_model->add($entered_email, $reset_key);
-
-        } catch (\Exception $e) {
-            $this->sessionMessage->set($e->getMessage());
-            header('Location: /password_reset');
-            exit;
+            $this->session->setFlashMessage('An error occurred while sending the email. Please try again later.');
+            $this->redirect('/password_reset');
         }
 
-        $email = new Email();
-        $email->send(
-            $entered_email,
-            'Password reset',
-            $email->render('password_reset.html', [
-                '__baseUrl__' => BASE_URL,
-                '__timeValid__' => $this->password_reset_model::TIME_VALID,
-                '__resetLink__' => $reset_link
-            ]),
-            $email->render('password_reset.txt', [
-                '__timeValid__' => $this->password_reset_model::TIME_VALID,
-                '__resetLink__' => $reset_link
-            ])
-        );
-
-        header('Location: /password_reset/email_sent');
+        $this->session->setFlashMessage($this->passwordResetModel->validator->getError());
+        $this->redirect('/password_reset');
     }
 
     public function emailSent(): void
     {
         $this->view->get('password_reset/email_sent.phtml', [
-            'page_title' => 'Password reset - Bookmarks'
+            'pageTitle' => 'Password reset - Bookmarks'
         ]);
     }
 
     public function resetIndex(): void
     {
-        if (!$this->formFields('GET', ['key']))
-            throw new \ErrorException('', 404);
+        if (!$this->requiredInputs('GET', ['auth_key']))
+            throw new \ErrorException('Not found', 404);
 
-        $key = $this->sanitizeInput($_GET['key']);
+        $email = null;
+        $authKey = $this->dataUtility->sanitizeInput($_GET['auth_key']);
 
-        try {
-            $email = $this->password_reset_model->getEmailByKey($key);
-
-        } catch (\Exception $e) {
-            $this->sessionMessage->set($e->getMessage());
+        if (!$this->passwordResetModel->verify($authKey)) {
+            $this->session->setFlashMessage($this->passwordResetModel->validator->getError());
+        } else {
+            $email = $this->userModel->getEmail($this->passwordResetModel->getUserId($authKey));
         }
 
         $this->view->get('password_reset/reset.phtml', [
-            'page_title' => 'Password reset - Bookmarks',
-            'email' => $email ?? null
+            'pageTitle' => 'Password reset - Bookmarks',
+            'email' => $email,
+            'minPasswordLength' => $this->userModel->validator::MIN_PASSWORD_LENGTH
         ]);
     }
 
     public function reset(): void
     {
-        if (!$this->formFields('POST', ['pswd', 'pswd_repeat']))
-            throw new \Exception('Not all required fields are filled.');
-
-        try {
-            $email = $this->password_reset_model->getEmailByKey($_POST['reset_key']);
-            $user_id = $this->user_model->getIdByEmail($email);
-            $this->user_model->changePassword($user_id, $_POST['pswd'], $_POST['pswd_repeat']);
-            $this->password_reset_model->delete($_POST['reset_key']);
-
-        } catch (\Exception $e) {
-            $this->sessionMessage->set($e->getMessage());
-            header('Location: /password_reset/reset?key=' . $_POST['reset_key']);
-            exit;
+        if (!$this->requiredInputs('POST', ['pswd', 'pswd_repeat', 'auth_key'])) {
+            $this->session->setFlashMessage('Not all required fields are filled.');
+            $this->redirect('/password_reset/reset?auth_key=' . $_POST['auth_key'] ?? null);
         }
 
-        header('Location: /password_reset/success');
+        $authKey = $this->dataUtility->sanitizeInput($_POST['auth_key']);
+        $password = $this->dataUtility->sanitizeInput($_POST['pswd']);
+        $passwordRepeat = $this->dataUtility->sanitizeInput($_POST['pswd_repeat']);
+
+        if (!$this->passwordResetModel->changePassword($authKey, $password, $passwordRepeat)) {
+            $this->session->setFlashMessage($this->passwordResetModel->validator->getError());
+            $this->redirect('/password_reset/reset?auth_key=' . $authKey);
+        }
+
+        $this->redirect('/password_reset/success');
     }
 
     public function success(): void
     {
         $this->view->get('password_reset/success.phtml', [
-            'page_title' => 'Password has been reset - Bookmarks'
+            'pageTitle' => 'Password changed - Bookmarks'
         ]);
     }
 }
