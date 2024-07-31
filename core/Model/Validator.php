@@ -31,7 +31,7 @@ abstract class Validator extends Model
     }
 
     /**
-     * **IMPORTANT: only $value parameter should contain data passed by the client!**
+     * **IMPORTANT: only $value parameter should contain data passed by a client!**
      * Check if a given value is/would be unique in a specific table, specific column.
      * 
      * @param  mixed $value
@@ -45,7 +45,7 @@ abstract class Validator extends Model
     }
 
     /**
-     * **IMPORTANT: only $value parameter should contain data passed by the client!**
+     * **IMPORTANT: only $value parameter should contain data passed by a client!**
      * Check if a given value exists in a specific table, specific column.
      *
      * @param  mixed $value
