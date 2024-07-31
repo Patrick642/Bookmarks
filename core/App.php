@@ -22,9 +22,6 @@ class App
 
         session_start();
 
-        $this->request = new Request();
-        $this->router = new Router();
-
         $this->router->route($this->request->getPath(), $this->request->getMethod());
     }
 }

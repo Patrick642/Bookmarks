@@ -30,19 +30,29 @@ abstract class Validator extends Model
         return true;
     }
 
+    /**
+     * **IMPORTANT: only $value parameter should contain data passed by the client!**
+     * Check if a given value is/would be unique in a specific table, specific column.
+     * 
+     * @param  mixed $value
+     * @param  string $tableName
+     * @param  string $columnName
+     * @return bool
+     */
     protected function unique(mixed $value, string $tableName, string $columnName): bool
     {
-        $query = 'SELECT COUNT(*) FROM ' . $tableName . ' WHERE ' . $columnName . ' = :value';
-
-        $stmt = $this->db()->prepare($query);
-
-        $stmt->bindValue(':value', $value);
-        $stmt->execute();
-        $fetch = $stmt->fetchColumn();
-
-        return ($fetch == 0) ? true : false;
+        return !$this->exists($value, $tableName, $columnName);
     }
 
+    /**
+     * **IMPORTANT: only $value parameter should contain data passed by the client!**
+     * Check if a given value exists in a specific table, specific column.
+     *
+     * @param  mixed $value
+     * @param  string $tableName
+     * @param  string $columnName
+     * @return bool
+     */
     protected function exists(mixed $value, string $tableName, string $columnName): bool
     {
         $query = 'SELECT COUNT(*) FROM ' . $tableName . ' WHERE ' . $columnName . ' = :value';
