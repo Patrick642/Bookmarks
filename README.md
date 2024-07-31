@@ -2,8 +2,8 @@
 An application for storing and sharing bookmarks written in PHP. 
 
 ## Requirements
-  * PHP 8.2.0 or higher
-  * MySQL database engine
+  * PHP 8.2.0 or later
+  * MySQL 5.7 or later
   * SMTP mail server
   * Composer
   * Git (optional, if you decide to clone the repository instead of manual downloading)

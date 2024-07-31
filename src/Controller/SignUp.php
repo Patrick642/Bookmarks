@@ -7,7 +7,7 @@ use src\Model\User\UserModel;
 use src\Utility\AuthKey;
 use src\Utility\Emails;
 
-class SignUp extends Controller
+final class SignUp extends Controller
 {
     private AuthKey $authKey;
     private Emails $emails;
@@ -60,7 +60,7 @@ class SignUp extends Controller
         $this->redirect('/signup');
     }
 
-    public function completeRegistration()
+    public function completeRegistration(): void
     {
         if ($this->userModel->getIsValid($this->session->getUserId()))
             $this->redirect('/dashboard');
@@ -71,7 +71,7 @@ class SignUp extends Controller
         ]);
     }
 
-    public function completeRegistrationSendEmail()
+    public function completeRegistrationSendEmail(): void
     {
         // Send verification email
         $userId = $this->session->getUserId();
@@ -86,7 +86,7 @@ class SignUp extends Controller
         $this->redirect('/dashboard');
     }
 
-    public function completeRegistrationVerify()
+    public function completeRegistrationVerify(): void
     {
         if (!$this->requiredInputs('GET', ['auth_key']))
             throw new \ErrorException('Not found', 404);

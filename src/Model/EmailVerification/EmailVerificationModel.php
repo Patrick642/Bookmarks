@@ -139,7 +139,9 @@ final class EmailVerificationModel extends Model
         if (!$this->userModel->updateEmail($fetch['user_id'], $fetch['email']))
             return false;
 
+        $this->userModel->updateValidity($fetch['user_id'], true);
         $this->delete($authKey);
+
         return true;
     }
 

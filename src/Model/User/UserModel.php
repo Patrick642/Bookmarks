@@ -68,14 +68,14 @@ final class UserModel extends Model
         return $fetch;
     }
 
-    public function getIsPublic(int $userId): bool
+    public function getIsPublic(int $userId): ?bool
     {
         $query = 'SELECT user.is_public FROM user WHERE user.id = :id';
 
         $stmt = $this->db()->prepare($query);
         $stmt->bindValue(':id', $userId, \PDO::PARAM_INT);
         $stmt->execute();
-        $fetch = $stmt->fetch(\PDO::FETCH_ASSOC)['is_public'];
+        $fetch = $stmt->fetch(\PDO::FETCH_ASSOC)['is_public'] ?? null;
 
         return $fetch;
     }

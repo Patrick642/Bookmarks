@@ -5,9 +5,9 @@ use core\Controller;
 use src\Model\Bookmark\BookmarkModel;
 use src\Model\User\UserModel;
 
-class Bookmarks extends Controller
+final class Bookmarks extends Controller
 {
-    private const MAX_BOOKMARKS_PER_PAGE = 8;
+    private const MAX_BOOKMARKS_PER_PAGE = 20;
 
     private BookmarkModel $bookmarkModel;
     private UserModel $userModel;
@@ -19,7 +19,7 @@ class Bookmarks extends Controller
         $this->userModel = new UserModel();
     }
 
-    public function dashboard()
+    public function dashboard(): void
     {
         if (!$this->userModel->getIsValid($this->session->getUserId()))
             $this->redirect('/complete_registration');
@@ -35,7 +35,7 @@ class Bookmarks extends Controller
         ]);
     }
 
-    public function shared()
+    public function shared(): void
     {
         if (!$this->requiredInputs('GET', ['u']))
             throw new \ErrorException('Not found', 404);

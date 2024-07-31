@@ -54,9 +54,9 @@ final class BookmarkModel extends Model
         $stmt = $this->db()->prepare($query);
         $stmt->bindValue(':id', $bookmarkId, \PDO::PARAM_INT);
         $stmt->execute();
-        $fetch = $stmt->fetch(\PDO::FETCH_ASSOC)['user_id'];
+        $fetch = $stmt->fetch(\PDO::FETCH_ASSOC)['user_id'] ?? null;
 
-        return $fetch ?? null;
+        return $fetch;
     }
 
     public function getLabel(int $bookmarkId): ?string
@@ -66,9 +66,9 @@ final class BookmarkModel extends Model
         $stmt = $this->db()->prepare($query);
         $stmt->bindValue(':id', $bookmarkId, \PDO::PARAM_INT);
         $stmt->execute();
-        $fetch = $stmt->fetch(\PDO::FETCH_ASSOC)['label'];
+        $fetch = $stmt->fetch(\PDO::FETCH_ASSOC)['label'] ?? null;
 
-        return $fetch ?? null;
+        return $fetch;
     }
 
     public function getUrl(int $bookmarkId): ?string
@@ -78,9 +78,9 @@ final class BookmarkModel extends Model
         $stmt = $this->db()->prepare($query);
         $stmt->bindValue(':id', $bookmarkId, \PDO::PARAM_INT);
         $stmt->execute();
-        $fetch = $stmt->fetch(\PDO::FETCH_ASSOC)['url'];
+        $fetch = $stmt->fetch(\PDO::FETCH_ASSOC)['url'] ?? null;
 
-        return $fetch ?? null;
+        return $fetch;
     }
 
     public function getUpdatedAt(int $bookmarkId): ?string
@@ -90,9 +90,9 @@ final class BookmarkModel extends Model
         $stmt = $this->db()->prepare($query);
         $stmt->bindValue(':id', $bookmarkId, \PDO::PARAM_INT);
         $stmt->execute();
-        $fetch = $stmt->fetch(\PDO::FETCH_ASSOC)['updated_at'];
+        $fetch = $stmt->fetch(\PDO::FETCH_ASSOC)['updated_at'] ?? null;
 
-        return $fetch ?? null;
+        return $fetch;
     }
 
     public function delete(int $bookmarkId): bool
@@ -117,7 +117,7 @@ final class BookmarkModel extends Model
 
         $stmt->execute();
 
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC) ?? [];
     }
 
     public function getUserBookmarkCount(string $userId): int
@@ -130,6 +130,6 @@ final class BookmarkModel extends Model
             ':user_id' => $userId
         ]);
 
-        return $stmt->fetchColumn();
+        return $stmt->fetchColumn() ?? 0;
     }
 }

@@ -1,16 +1,16 @@
 <div class="bookmark-card mx-auto my-4 bg-primary-subtle border border-primary text-white">
     <div class="bookmark-card-body d-flex flex-row">
-        <a target="_blank" class="bookmark-link w-100 d-flex flex-column justify-content-center" title="<?= $bookmark['url'] ?>" href="<?= $bookmark['url'] ?>">
-            <h5 class="w-100 fw-bold mb-0"><?= $bookmark['label'] ?></h5>
-            <h6 class="w-100 fw-lighter mb-0 text-body-secondary"><?= $bookmark['url'] ?></h6>
+        <a target="_blank" class="bookmark-link w-100 d-flex flex-column justify-content-center text-truncate" title="<?= $bookmark['url'] ?>" href="<?= $bookmark['url'] ?>">
+            <h5 class="w-100 fw-bold mb-0 text-truncate"><?= $bookmark['label'] ?></h5>
+            <h6 class="w-100 fw-lighter mb-0 text-body-secondary text-truncate"><?= $bookmark['url'] ?></h6>
         </a>
-        <div class="dropdown">
-            <button class="bookmark-dropdown-button border-0 bg-transparent" id="bookmarkMenu" data-bs-toggle="dropdown" aria-expanded="false">
+        <div class="dropdown h-100">
+            <button class="bookmark-dropdown-button h-100 border-0 bg-transparent" id="bookmarkMenu" data-bs-toggle="dropdown" aria-expanded="false">
                 <svg class="icon icon-tabler" width="24" height="24" viewBox="0 0 24 24">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M5 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
                     <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
-                    <path d="M19 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                    <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                    <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
                 </svg>
             </button>
             <ul class="dropdown-menu" aria-labelledby="bookmarkMenu">

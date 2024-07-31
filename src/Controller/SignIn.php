@@ -4,7 +4,7 @@ namespace src\Controller;
 use core\Controller;
 use src\Model\User\UserModel;
 
-class SignIn extends Controller
+final class SignIn extends Controller
 {
     private UserModel $userModel;
 

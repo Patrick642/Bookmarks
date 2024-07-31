@@ -1,6 +1,8 @@
 <?php
 namespace core;
 
+use src\Model\User\UserModel;
+
 abstract class Controller
 {
     protected DataUtility $dataUtility;
@@ -14,6 +16,20 @@ abstract class Controller
         $this->request = new Request();
         $this->session = new Session();
         $this->view = new View();
+
+        $this->validateSession();
+    }
+
+    /*
+     * Check if the user with the ID saved in the session exists.
+     * This method is necessary in case a user deletes their account (and session) in one browser while having an active session in another.
+     */
+    private function validateSession()
+    {
+        if ($this->session->getUserId() !== null && (new UserModel())->getUsername($this->session->getUserId()) === null) {
+            $this->session->destroy();
+            $this->redirect('/');
+        }
     }
 
     public function requiredInputs(string $method, array $fields = []): bool

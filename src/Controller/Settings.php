@@ -7,7 +7,7 @@ use src\Model\User\UserModel;
 use src\Utility\AuthKey;
 use src\Utility\Emails;
 
-class Settings extends Controller
+final class Settings extends Controller
 {
     private AuthKey $authKey;
     private Emails $emails;
@@ -54,7 +54,7 @@ class Settings extends Controller
         $this->jsonEncode(success: false, message: $this->emailVerificationModel->validator->getError());
     }
 
-    public function changeEmailVerify()
+    public function changeEmailVerify(): void
     {
         if (!$this->requiredInputs('GET', ['auth_key']))
             throw new \ErrorException('Not found', 404);

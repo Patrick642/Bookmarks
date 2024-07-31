@@ -1,7 +1,7 @@
 <?php include_once PAGE_HEADER; ?>
 <?php include_once PAGE_NAVBAR; ?>
 <div class="container-xl">
-    <div class="position-fixed bottom-0 end-0 m-4 d-flex flex-column gap-3">
+    <div class="z-3 position-fixed bottom-0 end-0 m-4 d-flex flex-column gap-3">
         <span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Add bookmark">
             <button class="dashboard-action-button bg-success rounded-circle border-0 shadow" data-bs-toggle="modal" data-bs-target="#addModal">
                 <svg class="icon icon-tabler" width="24" height="24" viewBox="0 0 24 24">
@@ -151,7 +151,7 @@
             <div class="modal-body">
                 <div class="input-group">
                     <input type="text" class="form-control" id="bookmarksShareLink" value="<?= BASE_URL . '/shared?u=' . $_SESSION['username'] ?>" disabled readonly>
-                    <button class="input-group-text" id="copyBookmarksShareLink">
+                    <button class="input-group-text" id="copyBookmarksShareLink" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Copy share link">
                         <svg class="icon icon-tabler" width="24" height="24" viewBox="0 0 24 24">
                             <path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" />
                             <path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" />

@@ -7,7 +7,7 @@ use src\Model\User\UserModel;
 use src\Utility\AuthKey;
 use src\Utility\Emails;
 
-class PasswordReset extends Controller
+final class PasswordReset extends Controller
 {
     private AuthKey $authKey;
     private Emails $emails;

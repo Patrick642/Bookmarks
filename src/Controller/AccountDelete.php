@@ -5,7 +5,7 @@ use core\Controller;
 use src\Model\User\UserModel;
 use src\Utility\Emails;
 
-class AccountDelete extends Controller
+final class AccountDelete extends Controller
 {
     private Emails $emails;
     private UserModel $userModel;

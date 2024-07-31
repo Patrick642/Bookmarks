@@ -3,7 +3,7 @@ namespace src\Controller;
 
 use core\Controller;
 
-class Home extends Controller
+final class Home extends Controller
 {
     public function index(): void
     {
