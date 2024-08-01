@@ -8,16 +8,6 @@ class DataUtility
         return htmlspecialchars(trim($input));
     }
 
-    public function convertToPascalCase(string $string): string
-    {
-        return str_replace(' ', '', ucwords(strtolower(preg_replace('/[\\s\-_]+/', ' ', $string))));
-    }
-
-    public function convertToCamelCase(string $string): string
-    {
-        return ltrim(strtolower(preg_replace('/[A-Z]([A-Z](?![a-z]))*/', '_$0', $string)), '_');
-    }
-
     public function convertSecondsToHuman(int $seconds): string
     {
         $human = '';

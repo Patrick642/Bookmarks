@@ -3,6 +3,52 @@ $(function () {
     /* Initialize tooltips */
     $('[data-bs-toggle="tooltip"]').tooltip();
 
+    /* Infinite scroll */
+    var loading = false;
+    var isLast = ($('#infiniteScrollData').length === 0) ? true : false;
+
+    /* Load more bookmarks and append it */
+    function loadMoreData() {
+        $('#infiniteScrollSpinner').removeClass('d-none');
+        loading = true;
+        let offset = $('.bookmark-card').length;
+
+        $.ajax({
+            type: 'GET',
+            url: '/get_more_bookmarks',
+            data: {
+                user_id: $('#infiniteScrollData').data('id'),
+                offset: offset
+            },
+            cache: false,
+            success: function (out) {
+                let result = JSON.parse(out);
+                if (result.success) {
+                    $('.col.bookmarks').append(result.render);
+                    $('#infiniteScrollSpinner').addClass('d-none');
+                    loading = false;
+                    if (result.isLast)
+                        isLast = true;
+
+                    checkScrollAndLoadData();
+                }
+            }
+        });
+    }
+
+    $(window).scroll(function () {
+        checkScrollAndLoadData();
+    });
+
+    /* In case if the page loads when the user has already scrolled to the bottom of the page, or if they have a large monitor, load more bookmarks. */
+    function checkScrollAndLoadData() {
+        if (Math.ceil($(window).scrollTop() + $(window).height()) >= $(document).height() && !loading && !isLast) {
+            loadMoreData();
+        }
+    }
+
+    checkScrollAndLoadData();
+
     /* Execute function to copy URL of the bookmark to the user's clipboard when the button is clicked. */
     $('[bookmark-copyurl]').click(function () {
         copyLink($(this).attr('bookmark-copyurl'));
@@ -78,36 +124,6 @@ $(function () {
             },
             error: function () {
                 alert('Something went wrong. Try again later.');
-            }
-        });
-    });
-
-    /* Load more bookmarks and append it */
-    $("#infiniteScrollButton").click(function (e) {
-        $('#infiniteScrollButton').prop('disabled', true);
-        $('#infiniteScrollButton .spinner-border').removeClass('d-none');
-        let offset = $('.bookmark-card').length;
-
-        $.ajax({
-            type: 'GET',
-            url: '/get_more_bookmarks',
-            data: {
-                user_id: $('#infiniteScrollButton').data('id'),
-                offset: offset
-            },
-            cache: false,
-            success: function (out) {
-
-                let result = JSON.parse(out);
-                if (result.success) {
-                    $('.col.bookmarks').append(result.render);
-                    if (result.isLast)
-                        $('#infiniteScrollButton').closest('.col').remove();
-                    else {
-                        $('#infiniteScrollButton .spinner-border').addClass('d-none');
-                        $('#infiniteScrollButton').prop('disabled', false);
-                    }
-                }
             }
         });
     });

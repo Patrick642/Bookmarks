@@ -43,11 +43,11 @@
             ?>
         </div>
         <?php if ($userHasMoreBookmarks): ?>
-            <div class="col d-flex justify-content-center align-items-center mb-3">
-                <button class="btn btn-lg btn-primary" data-id="<?= $userId ?>" id="infiniteScrollButton">
-                    <span class="spinner-border spinner-border-sm d-none"></span>
-                    <span role="status">Load more bookmarks</span>
-                </button>
+            <input type="hidden" data-id="<?= $userId ?>" id="infiniteScrollData">
+            <div class="d-flex justify-content-center d-none" id="infiniteScrollSpinner">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
             </div>
         <?php endif; ?>
     </main>
