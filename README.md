@@ -1,6 +1,9 @@
 # Bookmarks
 An application for storing and sharing bookmarks written in PHP. 
 
+## Demo
+🔗[Demo version of the application](https://bookmarks-demo.free.nf)
+
 ## Requirements
   * PHP 8.2.0 or later
   * MySQL 5.7 or later
