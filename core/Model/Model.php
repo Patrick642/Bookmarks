@@ -18,7 +18,7 @@ abstract class Model
             $this->config->get('db');
 
             try {
-                $dsn = 'mysql: host=' . DB_HOST . '; dbname=' . DB_NAME;
+                $dsn = 'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME;
                 $dbh = new PDO($dsn, DB_USER, DB_PASSWORD);
                 $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 $this->db = $dbh;
