@@ -25,7 +25,7 @@ class Mailer
             $mail->Port = MAIL_PORT;
             $mail->Username = MAIL_USERNAME;
             $mail->Password = MAIL_PASSWORD;
-            $mail->SetFrom(MAIL_SENDER);
+            $mail->SetFrom(MAIL_SENDER_EMAIL, MAIL_SENDER_NAME);
             $mail->addAddress($to);
             $mail->Subject = $subject;
             $mail->MsgHTML($htmlTemplate);
