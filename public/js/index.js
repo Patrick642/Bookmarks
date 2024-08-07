@@ -183,3 +183,7 @@ function copyLink(url) {
 
     return false;
 }
+
+function demoAlert() {
+    alert('This feature is not available in the demo version');
+}

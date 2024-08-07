@@ -22,7 +22,7 @@
                             </text>
                         </div>
                         <div class="d-flex align-items-center">
-                            <button class="btn text-primary" data-bs-toggle="modal" data-bs-target="#changeEmailModal">Change email</button>
+                            <button class="btn text-primary" onclick="demoAlert()">Change email</button>
                         </div>
                     </div>
                 </li>
@@ -49,31 +49,6 @@
             </ul>
         </div>
     </main>
-</div>
-
-<!-- Change user email modal -->
-<div class="modal" id="changeEmailModal" tabindex="-1" aria-labelledby="changeEmailModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header border-0">
-                <h1 class="modal-title fs-5" id="changeEmailModalLabel">Change your email address</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form method="POST" action="/settings/change_email" id="changeEmailForm" class="d-flex flex-column gap-3 form-modal">
-                    <div class="form-group">
-                        <label for="email" class="form-label">Enter your new email address:</label>
-                        <input type="email" class="form-control" id="email" name="email" required>
-                    </div>
-                    <div class="alert-container"></div>
-                </form>
-            </div>
-            <div class="modal-footer border-0">
-                <button type="button" class="btn" data-bs-dismiss="modal">Close</button>
-                <button type="submit" form="changeEmailForm" class="btn btn-success">Save</button>
-            </div>
-        </div>
-    </div>
 </div>
 
 <!-- Change user password modal -->

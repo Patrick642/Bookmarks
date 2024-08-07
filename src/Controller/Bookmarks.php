@@ -21,9 +21,6 @@ final class Bookmarks extends Controller
 
     public function dashboard(): void
     {
-        if (!$this->userModel->getIsValid($this->session->getUserId()))
-            $this->redirect('/complete_registration');
-
         $this->view->get('bookmarks/dashboard.phtml', [
             'pageTitle' => 'Dashboard - Bookmarks',
             'userId' => $this->session->getUserId(),

@@ -3,17 +3,14 @@ namespace src\Controller;
 
 use core\Controller;
 use src\Model\User\UserModel;
-use src\Utility\Emails;
 
 final class AccountDelete extends Controller
 {
-    private Emails $emails;
     private UserModel $userModel;
 
     public function __construct()
     {
         parent::__construct();
-        $this->emails = new Emails();
         $this->userModel = new UserModel();
     }
 
@@ -32,12 +29,8 @@ final class AccountDelete extends Controller
         }
 
         $password = $_POST['pswd_confirmation'];
-        $email = $this->userModel->getEmail($this->session->getUserId());
 
         if ($this->userModel->delete($this->session->getUserId(), $password)) {
-            $this->emails->sendDeleteAccountConfirmation($email);
-            $this->session->destroy();
-
             $this->redirect('/');
         }
 

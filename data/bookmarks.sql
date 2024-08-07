@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 29, 2024 at 04:45 PM
+-- Generation Time: Aug 07, 2024 at 10:43 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -38,33 +38,6 @@ CREATE TABLE `bookmark` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `email_verification`
---
-
-CREATE TABLE `email_verification` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `auth_key` varchar(255) NOT NULL,
-  `expires_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `password_reset`
---
-
-CREATE TABLE `password_reset` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `auth_key` varchar(255) NOT NULL,
-  `expires_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `user`
 --
 
@@ -90,22 +63,6 @@ ALTER TABLE `bookmark`
   ADD KEY `fk_bookmark_user_user_id` (`user_id`);
 
 --
--- Indexes for table `email_verification`
---
-ALTER TABLE `email_verification`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `auth_key` (`auth_key`),
-  ADD KEY `fk_email_verification_user_user_id` (`user_id`);
-
---
--- Indexes for table `password_reset`
---
-ALTER TABLE `password_reset`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `auth_key` (`auth_key`),
-  ADD KEY `fk_password_reset_user_user_id` (`user_id`);
-
---
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
@@ -124,18 +81,6 @@ ALTER TABLE `bookmark`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100000001;
 
 --
--- AUTO_INCREMENT for table `email_verification`
---
-ALTER TABLE `email_verification`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100000001;
-
---
--- AUTO_INCREMENT for table `password_reset`
---
-ALTER TABLE `password_reset`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100000001;
-
---
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
@@ -150,18 +95,6 @@ ALTER TABLE `user`
 --
 ALTER TABLE `bookmark`
   ADD CONSTRAINT `fk_bookmark_user_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `email_verification`
---
-ALTER TABLE `email_verification`
-  ADD CONSTRAINT `fk_email_verification_user_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `password_reset`
---
-ALTER TABLE `password_reset`
-  ADD CONSTRAINT `fk_password_reset_user_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
