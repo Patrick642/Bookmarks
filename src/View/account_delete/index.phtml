@@ -6,13 +6,13 @@
             <div class="card-body">
                 <div class="col-12 mb-4">
                     <h3 class="text-center">Delete your account</h3>
-                    <p>Are you sure you want to delete your account? All your saved bookmarks will be deleted forever. <b>You can't undo this action.</b></p>
+                    <p>Are you sure you want to delete your account? All your saved bookmarks will be deleted forever. <b>You can't undo this action.</b> Confirm your decision by entering your password.</p>
                 </div>
                 <form method="POST" action="/account_delete">
                     <div class="col-12 mb-4">
                         <div class="form-floating">
                             <input type="password" class="form-control" id="pswd_confirmation" name="pswd_confirmation" placeholder="Password" required>
-                            <label for="pswd_confirmation">Confirm your decision by entering your password:</label>
+                            <label for="pswd_confirmation">Password:</label>
                         </div>
                     </div>
                     <?php if ($session_message !== null): ?>
